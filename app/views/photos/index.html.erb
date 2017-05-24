@@ -32,19 +32,21 @@
         <p>
             <form action="/create_like" method="post">
               <!-- Hidden input for authenticity token to protect from forgery -->
-              <!-- <input name="authenticity_token" type="hidden" value="oW1/YDbrTmqU4Zu7AsI6g72rusYwo6dnqjI1FqRzoIJezyrQ2I9g+lpm8yD40jTWZUW7+uo21sVjN0SVr6PScA=="> -->
+              <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
 
               <input type="hidden" name="photo_id" value="<%= photo.id %>">
 
               <input type="hidden" name="user_id" value="<%= photo.user_id %>">
+              <% if photo.likes.pluck(:user_id).include? current_user.id%>
+              <% like=Like.where(:user_id => photo.user_id, :photo_id => photo.id) %>
 
-              <button class="btn btn-link">
-                <% if photo.likes.pluck(:user_id).include? current_user.id%>
-                <i class="fa fa-heart"></i>
+              <a href="/delete_like/<%=like.pluck(:id).shift %>"> <i class="fa fa-heart"></i></a>
                 <% else %>
+              <button class="btn btn-link">
                 <i class="fa fa-heart-o"></i>
                 <% end %>
               </button>
+
               <% if !photo.likes.pluck(:user_id).any? %>
               <small class="text-muted">be the first to like this</small>
               <% else %>
@@ -76,7 +78,7 @@
             <div class="media-body">
               <form action="/create_comment" method="post">
                 <!-- Hidden input for authenticity token to protect from forgery -->
-
+                <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
 
                 <input type="hidden" name="photo_id" value="<%= photo.id %>">
 
@@ -97,6 +99,7 @@
                       </button>
                     </span>
                   </div><!-- /input-group -->
+
                   <div class="row">
                   <div class="col-md-8 col-md-offset-2">
                     <% if current_user==photo.user %>

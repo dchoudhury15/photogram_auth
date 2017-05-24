@@ -4,6 +4,6 @@ class Photo < ApplicationRecord
   has_many :comments
   belongs_to :user
   has_many :likes
-  has_many :fans, :through => :likes, :source => :username
-  
+  has_many :fans, :through => :likes, :source => :user
+
 end
